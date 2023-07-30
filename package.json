@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "format": "prettier --write src/**/*.{js,jsx,ts,tsx}",
-    "lint": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
+    "lint": "eslint --fix --no-error-on-unmatched-pattern src/**/*.{js,jsx,ts,tsx}",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
