@@ -1,5 +1,5 @@
 {
-  "name": "react-native-skeleton-content-nonexpo",
+  "name": "rn-skeleton-content",
   "version": "1.0.14",
   "description": "A simple and fully customizable React Native component that implements a skeleton-like loader",
   "main": "lib/index.js",
@@ -43,16 +43,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexZajac/react-native-skeleton-content-nonexpo.git"
+    "url": "git+https://github.com/erennyuksell/rn-skeleton-content.git"
   },
   "keywords": [
     "node",
     "npm"
   ],
   "bugs": {
-    "url": "https://github.com/alexZajac/react-native-skeleton-content-nonexpo/issues"
+    "url": "https://github.com/erennyuksell/rn-skeleton-content/issues"
   },
-  "homepage": "https://github.com/alexZajac/react-native-skeleton-content-nonexpo#readme",
+  "homepage": "https://github.com/erennyuksell/rn-skeleton-content#readme",
   "dependencies": {
     "react-native-redash": "^16.0.11"
   },

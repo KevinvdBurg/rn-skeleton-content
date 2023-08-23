@@ -1,8 +1,8 @@
 ## React Native Skeleton Content Nonexpo
 
-> This the not-expo dependant version of [this package](https://github.com/alexZajac/react-native-skeleton-content).
+> This the not-expo dependant version of [this package](https://github.com/erennyuksell/react-native-skeleton-content).
 
-<img width="220px" align="right" src="https://raw.githubusercontent.com/alexZajac/react-native-skeleton-content/master/demos/main.gif" />
+<img width="220px" align="right" src="https://raw.githubusercontent.com/erennyuksell/react-native-skeleton-content/master/demos/main.gif" />
 
 React native Skeleton Content, a simple yet fully customizable component made to achieve loading animation in a Skeleton-style. Works in both iOS and Android.
 
@@ -12,7 +12,7 @@ React native Skeleton Content, a simple yet fully customizable component made to
 - It now supports nested layouts for children bones, see an example on [this snack](https://snack.expo.io/@alexandrezajac/skeleton-content-demo)
 - It finally supports percentages dimensions for bones, for any type of animation!
 
-[![Build Status](https://travis-ci.org/alexZajac/react-native-skeleton-content-nonexpo.svg?branch=master)](https://travis-ci.org/alexZajac/react-native-skeleton-content-nonexpo) [![Coverage Status](https://coveralls.io/repos/github/alexZajac/react-native-skeleton-content-nonexpo/badge.svg?branch=master)](https://coveralls.io/github/alexZajac/react-native-skeleton-content-nonexpo?branch=master) [![npm version](https://img.shields.io/npm/v/react-native-skeleton-content-nonexpo.svg?style=flat-square)](https://www.npmjs.com/package/react-native-skeleton-content)
+[![Build Status](https://travis-ci.org/erennyuksell/rn-skeleton-content.svg?branch=master)](https://travis-ci.org/erennyuksell/rn-skeleton-content) [![Coverage Status](https://coveralls.io/repos/github/erennyuksell/rn-skeleton-content/badge.svg?branch=master)](https://coveralls.io/github/erennyuksell/rn-skeleton-content?branch=master) [![npm version](https://img.shields.io/npm/v/rn-skeleton-content.svg?style=flat-square)](https://www.npmjs.com/package/react-native-skeleton-content)
 
 - [React Native Skeleton Content](#react-native-skeleton-content)
   - [Installation](#installation)
@@ -24,7 +24,7 @@ React native Skeleton Content, a simple yet fully customizable component made to
 ### Installation
 
 ```shell script
-npm install react-native-skeleton-content-nonexpo
+npm install rn-skeleton-content
 ```
 
 > This package requires the `react-native-linear-gradient` package, make sure it's installed and working on your project.
@@ -41,7 +41,7 @@ npm install react-native-reanimated
 1.  Import react-native-skeleton-content:
 
 ```javascript
-import SkeletonContent from 'react-native-skeleton-content-nonexpo';
+import SkeletonContent from 'rn-skeleton-content';
 ```
 
 2.  Once you create the SkeletonContent, you have two options:
@@ -111,7 +111,7 @@ Otherwise, you should consider using the good old `SkeletonContent`.
 ```typescript jsx
 import { FunctionComponent } from 'react';
 import { Text, TextStyle, StyleSheet } from 'react-native';
-import { PureSkeletonContent, ICustomViewStyle } from 'react-native-skeleton-content-nonexpo'; 
+import { PureSkeletonContent, ICustomViewStyle } from 'rn-skeleton-content'; 
 
 const Greetings: FunctionComponent<{ name: string }> = ({ name }) => 
   (<Text>Hello {name}</Text>);
@@ -145,7 +145,7 @@ See the playground section to experiment :
 **1** - Changing the direction of the animation (animationDirection prop) :
 
 <p align="center">
-<img width="300px" src="https://raw.githubusercontent.com/alexZajac/react-native-skeleton-content/master/demos/direction_change.gif" />
+<img width="300px" src="https://raw.githubusercontent.com/erennyuksell/react-native-skeleton-content/master/demos/direction_change.gif" />
 </p>
 
 ```javascript
@@ -164,7 +164,7 @@ export default function Placeholder () {
 **2** - Changing the colors and switching to "pulse" animation (boneColor, highlightColor and animationType prop) :
 
 <p align="center">
-<img width="300px" src="https://raw.githubusercontent.com/alexZajac/react-native-skeleton-content/master/demos/color_change.gif" />
+<img width="300px" src="https://raw.githubusercontent.com/erennyuksell/react-native-skeleton-content/master/demos/color_change.gif" />
 </p>
 
 ```javascript
@@ -185,7 +185,7 @@ export default function Placeholder () {
 **3** - Customizing the layout of the bones (layout prop) :
 
 <p align="center">
-<img width="300px" src="https://raw.githubusercontent.com/alexZajac/react-native-skeleton-content/master/demos/layout_change.gif" />
+<img width="300px" src="https://raw.githubusercontent.com/erennyuksell/react-native-skeleton-content/master/demos/layout_change.gif" />
 </p>
 
 ```javascript
