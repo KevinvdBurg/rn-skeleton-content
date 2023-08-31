@@ -1,17 +1,13 @@
 import * as React from 'react';
 import { useMemo } from 'react';
 import {
-  useCode,
-  cond,
-  eq,
-  set,
-  useValue,
-  Easing,
+  useDerivedValue,
+  useSharedValue,
+  withRepeat,
   withTiming
 } from 'react-native-reanimated';
 
 import { View } from 'react-native';
-import { loop } from './animationUtils';
 import {
   DEFAULT_ANIMATION_DIRECTION,
   DEFAULT_ANIMATION_TYPE,
@@ -42,37 +38,17 @@ const SkeletonContent: React.FunctionComponent<ISkeletonContentProps &
   component: Component,
   componentProps
 }) => {
-  const animationValue = useValue(0);
-  const loadingValue = useValue(isLoading ? 1 : 0);
-  const shiverValue = useValue(animationType === 'shiver' ? 1 : 0);
+  let animationValue = useSharedValue(0);
 
   const [componentSize, onLayout] = useLayout();
 
-  useCode(
-    () =>
-      cond(eq(loadingValue, 1), [
-        cond(
-          eq(shiverValue, 1),
-          [
-            set(
-              animationValue,
-              withTiming(duration, {
-                easing: Easing.bezier(0.5, 0, 0.25, 1)
-              })
-            )
-          ],
-          [
-            set(
-              animationValue,
-              withTiming(duration! / 2, {
-                easing: Easing.bezier(0.5, 0, 0.25, 1)
-              })
-            )
-          ]
-        )
-      ]),
-    [loadingValue, shiverValue, animationValue]
-  );
+  animationValue = useDerivedValue(() => {
+    if (isLoading) return 0;
+    if (animationType === 'shiver') {
+      return withRepeat(withTiming(duration!), -1);
+    }
+    return withRepeat(withTiming(duration! / 2), -1);
+  }, [isLoading, animationType, duration]);
 
   const skeletonMeta = useMemo<ISkeletonMeta>(
     () => ({

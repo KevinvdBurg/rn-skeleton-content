@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
-import Animated from 'react-native-reanimated';
+import Animated, {
+  interpolateColor,
+  interpolateNode,
+  useDerivedValue
+} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 
 import { DEFAULT_BORDER_RADIUS, styles } from './Constants';
@@ -124,13 +128,13 @@ const getGradientSize = (
 
 const getStaticBoneStyles = (
   boneLayout: ICustomViewStyle,
-  animatedValue: Animated.Value<number>,
+  animatedValue: Animated.SharedValue<number>,
   meta: ISkeletonMeta
 ): (ICustomViewStyle | { backgroundColor: any })[] => {
   const pulseStyles = [
     getBoneStyles(boneLayout, meta),
     {
-      backgroundColor: animatedValue.interpolate({
+      backgroundColor: interpolateNode(animatedValue.value, {
         inputRange: [0, 1],
         outputRange: [meta.boneColor!, meta.highlightColor!]
       })
@@ -170,7 +174,7 @@ const getPositionRange = (
 
 const getGradientTransform = (
   boneLayout: ICustomViewStyle,
-  animatedValue: Animated.Value<number>,
+  animatedValue: Animated.SharedValue<number>,
   meta: ISkeletonMeta
 ): object => {
   let transform = {};
@@ -186,7 +190,7 @@ const getGradientTransform = (
     animationDirection === 'horizontalLeft' ||
     animationDirection === 'horizontalRight'
   ) {
-    const interpolatedPosition = animatedValue.interpolate({
+    const interpolatedPosition = interpolateNode(animatedValue.value, {
       inputRange: [0, 1],
       outputRange: getPositionRange(boneLayout, meta)
     });
@@ -256,13 +260,14 @@ const getGradientTransform = (
       }
     }
 
-    let translateX = animatedValue.interpolate({
+    let translateX = interpolateNode(animatedValue.value, {
       inputRange: [0, 1],
       outputRange: xOutputRange
     });
-    let translateY = animatedValue.interpolate({
+
+    let translateY = interpolateNode(animatedValue.value, {
       inputRange: [0, 1],
-      outputRange: yOutputRange
+      outputRange: xOutputRange
     });
 
     // swapping the translates if width is the main dim
@@ -290,19 +295,21 @@ const getBoneContainer = (
 const getStaticBone = (
   layoutStyle: ICustomViewStyle,
   key: number | string,
-  animatedValue: Animated.Value<number>,
+  animatedValue: Animated.SharedValue<number>,
   skeletonMeta: ISkeletonMeta
-): JSX.Element => (
-  <Animated.View
-    key={layoutStyle.key || key}
-    style={getStaticBoneStyles(layoutStyle, animatedValue, skeletonMeta)}
-  />
-);
+): JSX.Element => {
+  return (
+    <Animated.View
+      key={layoutStyle.key || key}
+      style={getStaticBoneStyles(layoutStyle, animatedValue, skeletonMeta)}
+    />
+  );
+};
 
 const getShiverBone = (
   layoutStyle: ICustomViewStyle,
   key: number | string,
-  animatedValue: Animated.Value<number>,
+  animatedValue: Animated.SharedValue<number>,
   skeletonMeta: ISkeletonMeta
 ): JSX.Element => {
   const { boneColor, highlightColor } = skeletonMeta;
@@ -332,7 +339,7 @@ export const getBones = (
   bonesLayout: ICustomViewStyle[] | undefined,
   childrenItems: any,
   prefix: string | number = '',
-  animatedValue: Animated.Value<number>,
+  animatedValue: Animated.SharedValue<number>,
   skeletonMeta: ISkeletonMeta
 ): JSX.Element[] => {
   const { animationType } = skeletonMeta;

@@ -9,7 +9,6 @@ export const DEFAULT_ANIMATION_DIRECTION: AnimationDirection =
   'horizontalRight';
 export const DEFAULT_BONE_COLOR = '#E1E9EE';
 export const DEFAULT_HIGHLIGHT_COLOR = '#F2F8FC';
-// export const DEFAULT_EASING = EasingNode.bezier(0.5, 0, 0.25, 1);
 export const DEFAULT_LOADING = true;
 
 export const styles = StyleSheet.create({

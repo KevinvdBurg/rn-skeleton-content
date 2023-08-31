@@ -53,9 +53,6 @@
     "url": "https://github.com/erennyuksell/rn-skeleton-content/issues"
   },
   "homepage": "https://github.com/erennyuksell/rn-skeleton-content#readme",
-  "dependencies": {
-    "react-native-redash": "^18.1.0"
-  },
   "peerDependencies": {
     "react-native-linear-gradient": "^2.8.2",
     "react-native-reanimated": "^3.4.2"

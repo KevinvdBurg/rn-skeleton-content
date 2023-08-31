@@ -1,4 +1,4 @@
-import { ComponentType } from 'react';
+import { Component, ComponentType } from 'react';
 import { StyleProp, ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 
