@@ -1,6 +1,14 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { useCode, cond, eq, set, useValue } from 'react-native-reanimated';
+import {
+  useCode,
+  cond,
+  eq,
+  set,
+  useValue,
+  Easing,
+  withTiming
+} from 'react-native-reanimated';
 
 import { View } from 'react-native';
 import { loop } from './animationUtils';
@@ -9,7 +17,6 @@ import {
   DEFAULT_ANIMATION_TYPE,
   DEFAULT_BONE_COLOR,
   DEFAULT_DURATION,
-  DEFAULT_EASING,
   DEFAULT_HIGHLIGHT_COLOR,
   DEFAULT_LOADING,
   styles
@@ -24,7 +31,6 @@ import { getBones, useLayout } from './utils';
 const SkeletonContent: React.FunctionComponent<ISkeletonContentProps &
   Partial<IPureSkeletonContentPropsFields>> = ({
   containerStyle = styles.container,
-  easing = DEFAULT_EASING,
   duration = DEFAULT_DURATION,
   layout = [],
   animationType = DEFAULT_ANIMATION_TYPE,
@@ -50,19 +56,16 @@ const SkeletonContent: React.FunctionComponent<ISkeletonContentProps &
           [
             set(
               animationValue,
-              loop({
-                duration,
-                easing
+              withTiming(duration, {
+                easing: Easing.bezier(0.5, 0, 0.25, 1)
               })
             )
           ],
           [
             set(
               animationValue,
-              loop({
-                duration: duration! / 2,
-                easing,
-                boomerang: true
+              withTiming(duration! / 2, {
+                easing: Easing.bezier(0.5, 0, 0.25, 1)
               })
             )
           ]

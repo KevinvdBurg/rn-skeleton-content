@@ -39,7 +39,6 @@ export const loop = (loopConfig: LoopProps) => {
   const config = {
     toValue: new Value(1),
     duration,
-
     easing
   };
 
