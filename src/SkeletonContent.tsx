@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { useCode, cond, eq, set } from 'react-native-reanimated';
+import { useCode, cond, eq, set, useValue } from 'react-native-reanimated';
 
 import { View } from 'react-native';
-import { loop, useValue } from 'react-native-redash/lib/module/v1';
+import { loop } from './animationUtils';
 import {
   DEFAULT_ANIMATION_DIRECTION,
   DEFAULT_ANIMATION_TYPE,

@@ -54,10 +54,10 @@
   },
   "homepage": "https://github.com/erennyuksell/rn-skeleton-content#readme",
   "dependencies": {
-    "react-native-redash": "^16.0.11"
+    "react-native-redash": "^18.1.0"
   },
   "peerDependencies": {
-    "react-native-linear-gradient": "^2.5.1",
+    "react-native-linear-gradient": "^2.8.2",
     "react-native-reanimated": "^3.0.0"
   },
   "devDependencies": {
@@ -68,7 +68,7 @@
     "@types/react-test-renderer": "^16.9.2",
     "babel-jest": "^25.5.1",
     "babel-preset-expo": "^8.2.1",
-    "coveralls": "^3.1.0",
+    "coveralls": "^3.1.1",
     "eslint": "^7.2.0",
     "eslint-config-airbnb-typescript-prettier": "^2.1.1",
     "jest": "^24.9.0",
