@@ -4,7 +4,7 @@ import {
   useDerivedValue,
   useSharedValue,
   withRepeat,
-  withTiming
+  withTiming,
 } from 'react-native-reanimated';
 
 import { View } from 'react-native';
@@ -15,17 +15,18 @@ import {
   DEFAULT_DURATION,
   DEFAULT_HIGHLIGHT_COLOR,
   DEFAULT_LOADING,
-  styles
+  styles,
 } from './Constants';
 import {
   IPureSkeletonContentPropsFields,
   ISkeletonContentProps,
-  ISkeletonMeta
+  ISkeletonMeta,
 } from './types';
 import { getBones, useLayout } from './utils';
 
-const SkeletonContent: React.FunctionComponent<ISkeletonContentProps &
-  Partial<IPureSkeletonContentPropsFields>> = ({
+const SkeletonContent: React.FunctionComponent<
+  ISkeletonContentProps & Partial<IPureSkeletonContentPropsFields>
+> = ({
   containerStyle = styles.container,
   duration = DEFAULT_DURATION,
   layout = [],
@@ -36,7 +37,7 @@ const SkeletonContent: React.FunctionComponent<ISkeletonContentProps &
   highlightColor = DEFAULT_HIGHLIGHT_COLOR,
   children,
   component: Component,
-  componentProps
+  componentProps,
 }) => {
   let animationValue = useSharedValue(0);
 
@@ -56,20 +57,20 @@ const SkeletonContent: React.FunctionComponent<ISkeletonContentProps &
       animationType,
       highlightColor,
       boneColor,
-      animationDirection
+      animationDirection,
     }),
     [
       animationDirection,
       animationType,
       boneColor,
       componentSize,
-      highlightColor
+      highlightColor,
     ]
   );
 
   const bones = useMemo(() => {
     return isLoading
-      ? getBones(layout, children, '', animationValue, skeletonMeta)
+      ? getBones(layout, children, animationValue, skeletonMeta, '')
       : null;
   }, [animationValue, children, isLoading, layout, skeletonMeta]);
 

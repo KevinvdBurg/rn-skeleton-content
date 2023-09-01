@@ -15,12 +15,12 @@ export const styles = StyleSheet.create({
   absoluteGradient: {
     height: '100%',
     position: 'absolute',
-    width: '100%'
+    width: '100%',
   },
   container: {
-    flex: 1
+    flex: 1,
   },
   gradientChild: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

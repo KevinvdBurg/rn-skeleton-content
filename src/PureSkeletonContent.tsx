@@ -18,7 +18,7 @@ export const didChange = <T extends object>(
   const keys = new Set([...prevKeys, ...nextKeys]);
 
   if (Array.isArray(removeKeys) && removeKeys.length > 0) {
-    removeKeys.forEach(key => keys.delete(key));
+    removeKeys.forEach((key) => keys.delete(key));
   }
 
   // eslint-disable-next-line no-restricted-syntax
@@ -31,9 +31,9 @@ export const didChange = <T extends object>(
   return false;
 };
 
-const PureSkeletonContent = <T,>(props: IPureSkeletonContentProps<T>) => (
-  <SkeletonContent {...props} />
-);
+function PureSkeletonContent<T>(props: IPureSkeletonContentProps<T>) {
+  return <SkeletonContent {...props} />;
+}
 
 export default React.memo(PureSkeletonContent, (prev, next) => {
   if (didChange(prev, next, ['layout', 'componentProps'])) {
@@ -58,7 +58,7 @@ export default React.memo(PureSkeletonContent, (prev, next) => {
   if (prev.layout && next.layout) {
     // eslint-disable-next-line no-restricted-syntax
     for (const item of prev.layout) {
-      if (!next.layout.find(it => Object.is(it, item))) {
+      if (!next.layout.find((it) => Object.is(it, item))) {
         return false;
       }
     }

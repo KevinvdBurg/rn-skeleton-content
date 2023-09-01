@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useCallback, useState } from 'react';
 import { LayoutChangeEvent, View } from 'react-native';
 import Animated, {
+  interpolate,
   interpolateColor,
-  interpolateNode,
-  useDerivedValue
+  SharedValue,
 } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -13,7 +13,7 @@ import {
   IComponentSize,
   ICustomViewStyle,
   IDirection,
-  ISkeletonMeta
+  ISkeletonMeta,
 } from './types';
 
 export const useLayout: () => [
@@ -34,15 +34,25 @@ export const useLayout: () => [
 const getBoneLayout = (
   boneLayout: ICustomViewStyle,
   layout: IComponentSize
-) => ({
-  width:
-    (typeof boneLayout.width === 'string' ? layout.width : boneLayout.width) ||
-    0,
-  height:
-    (typeof boneLayout.height === 'string'
-      ? layout.height
-      : boneLayout.height) || 0
-});
+) => {
+  let width =
+    typeof boneLayout.height === 'string' ? layout.width : boneLayout.width;
+  let height =
+    typeof boneLayout.height === 'string' ? layout.height : boneLayout.height;
+
+  if (width === null || width === undefined || width === 0) {
+    width = 0;
+  }
+
+  if (height === null || height === undefined) {
+    height = 0;
+  }
+
+  return {
+    width,
+    height,
+  };
+};
 
 const getGradientEndDirection = (
   boneLayout: ICustomViewStyle,
@@ -85,7 +95,7 @@ const getBoneStyles = (
   const boneStyle: ICustomViewStyle = {
     ...getBoneLayout(boneLayout, size),
     borderRadius: boneLayout.borderRadius || DEFAULT_BORDER_RADIUS,
-    ...boneLayout
+    ...boneLayout,
   };
 
   if (animationType !== 'pulse') {
@@ -108,7 +118,7 @@ const getGradientSize = (
   boneLayout: ICustomViewStyle,
   { size, animationDirection }: ISkeletonMeta
 ): ICustomViewStyle => {
-  const gradientStyle = getBoneLayout(boneLayout, size);
+  let { width, height } = getBoneLayout(boneLayout, size);
 
   if (
     animationDirection === 'diagonalDownRight' ||
@@ -116,29 +126,32 @@ const getGradientSize = (
     animationDirection === 'diagonalTopRight' ||
     animationDirection === 'diagonalTopLeft'
   ) {
-    if (gradientStyle.height >= gradientStyle.width) {
-      gradientStyle.height *= 1.5;
-    } else {
-      gradientStyle.width *= 1.5;
+    if (height >= width) {
+      if (typeof height === 'number') {
+        height *= 1.5;
+      }
+    } else if (typeof width === 'number') {
+      width *= 1.5;
     }
   }
 
-  return gradientStyle;
+  return { width, height };
 };
 
 const getStaticBoneStyles = (
   boneLayout: ICustomViewStyle,
-  animatedValue: Animated.SharedValue<number>,
+  animatedValue: SharedValue<number>,
   meta: ISkeletonMeta
 ): (ICustomViewStyle | { backgroundColor: any })[] => {
   const pulseStyles = [
     getBoneStyles(boneLayout, meta),
     {
-      backgroundColor: interpolateNode(animatedValue.value, {
-        inputRange: [0, 1],
-        outputRange: [meta.boneColor!, meta.highlightColor!]
-      })
-    }
+      backgroundColor: interpolateColor(
+        animatedValue.value,
+        [0, 1],
+        [meta.boneColor!, meta.highlightColor!]
+      ),
+    },
   ];
 
   if (meta.animationType === 'none') {
@@ -174,7 +187,7 @@ const getPositionRange = (
 
 const getGradientTransform = (
   boneLayout: ICustomViewStyle,
-  animatedValue: Animated.SharedValue<number>,
+  animatedValue: SharedValue<number>,
   meta: ISkeletonMeta
 ): object => {
   let transform = {};
@@ -190,10 +203,11 @@ const getGradientTransform = (
     animationDirection === 'horizontalLeft' ||
     animationDirection === 'horizontalRight'
   ) {
-    const interpolatedPosition = interpolateNode(animatedValue.value, {
-      inputRange: [0, 1],
-      outputRange: getPositionRange(boneLayout, meta)
-    });
+    const interpolatedPosition = interpolate(
+      animatedValue.value,
+      [0, 1],
+      getPositionRange(boneLayout, meta)
+    );
     if (
       animationDirection === 'verticalTop' ||
       animationDirection === 'verticalDown'
@@ -208,10 +222,15 @@ const getGradientTransform = (
     animationDirection === 'diagonalDownLeft' ||
     animationDirection === 'diagonalTopLeft'
   ) {
-    const diagonal = Math.sqrt(boneHeight * boneHeight + boneWidth * boneWidth);
-    const mainDimension = Math.max(boneHeight, boneWidth);
-    const oppositeDimension =
-      mainDimension === boneWidth ? boneHeight : boneWidth;
+    let diagonal = 0;
+    let mainDimension = 0;
+    let oppositeDimension = 0;
+    if (typeof boneWidth === 'number' && typeof boneHeight === 'number') {
+      diagonal = Math.sqrt(boneHeight * boneHeight + boneWidth * boneWidth);
+      mainDimension = Math.max(boneHeight, boneWidth);
+      oppositeDimension = mainDimension === boneWidth ? boneHeight : boneWidth;
+    }
+
     const diagonalAngle = Math.acos(mainDimension / diagonal);
     let rotateAngle =
       animationDirection === 'diagonalDownRight' ||
@@ -260,15 +279,9 @@ const getGradientTransform = (
       }
     }
 
-    let translateX = interpolateNode(animatedValue.value, {
-      inputRange: [0, 1],
-      outputRange: xOutputRange
-    });
+    let translateX = interpolate(animatedValue.value, [0, 1], xOutputRange);
 
-    let translateY = interpolateNode(animatedValue.value, {
-      inputRange: [0, 1],
-      outputRange: xOutputRange
-    });
+    let translateY = interpolate(animatedValue.value, [0, 1], xOutputRange);
 
     // swapping the translates if width is the main dim
     if (mainDimension === boneWidth) {
@@ -309,13 +322,13 @@ const getStaticBone = (
 const getShiverBone = (
   layoutStyle: ICustomViewStyle,
   key: number | string,
-  animatedValue: Animated.SharedValue<number>,
+  animatedValue: SharedValue<number>,
   skeletonMeta: ISkeletonMeta
 ): JSX.Element => {
   const { boneColor, highlightColor } = skeletonMeta;
   const animatedStyle: any = {
     transform: [getGradientTransform(layoutStyle, animatedValue, skeletonMeta)],
-    ...getGradientSize(layoutStyle, skeletonMeta)
+    ...getGradientSize(layoutStyle, skeletonMeta),
   };
 
   return (
@@ -338,9 +351,9 @@ const getShiverBone = (
 export const getBones = (
   bonesLayout: ICustomViewStyle[] | undefined,
   childrenItems: any,
-  prefix: string | number = '',
-  animatedValue: Animated.SharedValue<number>,
-  skeletonMeta: ISkeletonMeta
+  animatedValue: SharedValue<number>,
+  skeletonMeta: ISkeletonMeta,
+  prefix: string | number = ''
 ): JSX.Element[] => {
   const { animationType } = skeletonMeta;
 
@@ -357,9 +370,9 @@ export const getBones = (
           getBones(
             childBones,
             [],
-            containerPrefix,
             animatedValue,
-            skeletonMeta
+            skeletonMeta,
+            containerPrefix
           ),
           containerPrefix
         );
